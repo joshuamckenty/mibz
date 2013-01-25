@@ -27,7 +27,18 @@ INSTALLATION:
 
 Pycopia is a PITA to install - see especially http://code.google.com/p/pycopia/issues/detail?id=6
 I unpacked all the MIBS from libsmi into /usr/share/mibs/.
+ftp://ftp.ibr.cs.tu-bs.de/pub/local/libsmi/
 
+
+apt-get install vim subversion lighttpd libreadline-dev libsqlite3-dev libsmi2-dev openssl postgresql postgresql-client libpq-dev snmpd snmp libsmi
+pip install pyrex pyro4 pyxml docutils psycopg2 sqlalchemy simplejson pytz pycrypto
+svn checkout http://pycopia.googlecode.com/svn/trunk/ pycopia
+cd pycopia/utils
+pyrexc pycopia.itimer.pyx
+cd ..
+python setup.py install
+
+pip install flask twisted
 
 SECOND IDEA:
 -----------
