@@ -1,20 +1,4 @@
-FIRST IDEA:
------------
-Deploy GitLab, backed onto an object store, using CloudBirds and CloudEnvy.
-
-
-http://dev.cloudbirds.org/
-
-fixed: 		15.185.99.198
-floating: 	15.185.109.96
-
-https://github.com/gitlabhq/gitlabhq/blob/stable/doc/install/installation.md
-https://github.com/gitlabhq/gitlabhq/blob/stable/doc/install/databases.md
-https://github.com/gitlabhq/gitlabhq
-http://www.fancybeans.com/blog/2012/08/24/how-to-use-s3-as-a-private-git-repository/
-
-
-SECOND IDEA:
+MIBZ:
 -------------
 Set up a MIBS service (bought mibz.org) that works like PyPy, e.g.:
 
@@ -38,8 +22,14 @@ Which returns json list of urls to fetch mibs from:
 
 Then mib_install will wget each of those into /usr/share/mibs (or distro-specific target.)
 
+INSTALLATION:
+=============
 
-THIRD IDEA:
+Pycopia is a PITA to install - see especially http://code.google.com/p/pycopia/issues/detail?id=6
+I unpacked all the MIBS from libsmi into /usr/share/mibs/.
+
+
+SECOND IDEA:
 -----------
 Write a REST-to-SNMP bridge.
 
@@ -84,12 +74,6 @@ http://tools.cisco.com/Support/SNMP/do/BrowseMIB.do?local=en&step=2&submitClicke
 http://www.simpleweb.org/ietf/mibs/modules/IETF/txt/SNMPv2-MIB
 http://stackoverflow.com/questions/7731411/how-can-i-check-the-data-transfer-on-a-network-interface-in-python
 
-
-server-1357278006-az-1-region-a-geo-1
-
-sudo -u gitlab -H git config --global user.email "gitlab@cloudbirds.org"
-
-/etc/hosts for the outside hostname
 
 
 from pysnmp.entity.rfc3413.oneliner import cmdgen

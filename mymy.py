@@ -1,7 +1,24 @@
+# LICENSE HERE
+"""
+Simple MIBZ daemon, returns lists of needed MIBS.
+Also resolves those to URLS of statically served MIB files.
+"""
+
 import os
+import logging
 import sys
 import glob
+from flask import Flask, request, render_template, g
+from twisted.internet import task
+from twisted.internet import reactor
+from twisted.web.wsgi import WSGIResource
+from twisted.web.server import Site
+
 from pycopia.SMI import SMI
+
+PORT = 8000
+
+app = Flask(__name__)
 
 SMI.set_error_level(9)
 MIBS_DIRS = ['/usr/share/mibs/*/*', '/usr/share/mibs/*.txt']
@@ -9,20 +26,7 @@ MIBS_DIRS = ['/usr/share/mibs/*/*', '/usr/share/mibs/*.txt']
 mods = []
 for DIR in MIBS_DIRS:
 	mods.extend( [x for x in glob.glob(DIR)] )
-
 SMI.load_modules(mods)
-
-for mod in SMI.get_modules():
-	print mod
-
-tree = {}
-
-node = SMI.get_node('iscsiObjects')
-if node is None:
-	sys.exit(1)
-
-first_mod = node.get_module()
-tree[first_mod.name] = first_mod.path
 
 def fetch_deps(mod, tree):
 	imports = mod.get_imports()
@@ -32,5 +36,20 @@ def fetch_deps(mod, tree):
 			tree[imp.module] = real_mod.path
 			fetch_deps(SMI.get_module(imp.module), tree)
 
-fetch_deps(first_mod, tree)
-print tree
+@app.route('/by-node/<nodename>')
+def tree_for_node(nodename='iscsiObjects'):
+	tree = {}
+	node = SMI.get_node(nodename)
+	if node is not None:
+		first_mod = node.get_module()
+		tree[first_mod.name] = first_mod.path
+		fetch_deps(first_mod, tree)
+	return tree
+
+
+
+resource = WSGIResource(reactor, reactor.getThreadPool(), app)
+site = Site(resource)
+reactor.listenTCP(PORT, site)
+reactor.run()
+
