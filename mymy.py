@@ -8,6 +8,7 @@ import os
 import logging
 import sys
 import glob
+import json
 from flask import Flask, request, render_template, g
 from twisted.internet import task
 from twisted.internet import reactor
@@ -54,7 +55,7 @@ def tree_for_node(nodename='iscsiObjects'):
 		first_mod = node.get_module()
 		tree[first_mod.name] = pathify(first_mod.path)
 		fetch_deps(first_mod, tree)
-	return "%s" % (str(tree))
+	return json.dumps(tree)
 
 
 resource = WSGIResource(reactor, reactor.getThreadPool(), app)
