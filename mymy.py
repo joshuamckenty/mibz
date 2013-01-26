@@ -42,6 +42,10 @@ def fetch_deps(mod, tree):
 			tree[imp.module] = pathify(real_mod.path)
 			fetch_deps(SMI.get_module(imp.module), tree)
 
+@app.route('/')
+def index():
+	return render_template('index.html')
+
 @app.route('/by-node/<nodename>')
 def tree_for_node(nodename='iscsiObjects'):
 	tree = {}
