@@ -14,7 +14,8 @@ def fetch_it(url):
 		with open(filepath, 'w') as f:
 			f.write(mib.read())
 	except IOError, e:
-		print "Looks like you don't have a standard /usr/share/mibs folder(!)\n Failing."
+		print "Looks like you don't have a standard /usr/share/mibs folder(!)"
+		print "Try >apt-get install snmp\n Failing."
 		sys.exit(1)
 
 mib_list = json.loads(urllib2.urlopen(MIBZ_URL).read())
