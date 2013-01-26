@@ -5,9 +5,16 @@ import requests
 import json
 
 MIBZ_URL = "http://mibz.org/by-node/%s" % (sys.argv[1])
+MIBS_DIR = "/usr/share/mibs/"
 
-mib_string = requests.get(MIBZ_URL).text
-print mib_string
-mib_list = json.loads(mib_string)
+def fetch_it(url):
+	mib = requests.get(url)
+	filepath = "%s%s" % (MIBS_DIR, mib.url.split("/")[-1])
+	with open(filepath, 'w') as f:
+		f.write(mib.text)
 
-print mib_list
+mib_list = requests.get(MIBZ_URL).json
+for mib_name in mib_list.keys():
+	print "%s (from %s)..." % (mib_name, mib_list[mib_name])
+	fetch_it(mib_list[mib_name])
+	
