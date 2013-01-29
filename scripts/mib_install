@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import collections
 import sys
 import urllib2
 import json
@@ -18,8 +19,12 @@ def fetch_it(url):
 		print "Try >apt-get install snmp\n Failing."
 		sys.exit(1)
 
-mib_list = json.loads(urllib2.urlopen(MIBZ_URL).read())
+mib_list = json.loads(urllib2.urlopen(MIBZ_URL).read(), object_pairs_hook=collections.OrderedDict)
+if not mib_list:
+	print "Term not found on mibz.org."
+	sys.exit(0)
+	
 for mib_name in mib_list.keys():
 	fetch_it(mib_list[mib_name])
 	print "%s (from %s)..." % (mib_name, mib_list[mib_name])
-
+print "\n Use this term as %s::%s" % (mib_list.keys()[0], sys.argv[1])
