@@ -22,3 +22,4 @@ mib_list = json.loads(urllib2.urlopen(MIBZ_URL).read())
 for mib_name in mib_list.keys():
 	fetch_it(mib_list[mib_name])
 	print "%s (from %s)..." % (mib_name, mib_list[mib_name])
+

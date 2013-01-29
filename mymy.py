@@ -9,6 +9,7 @@ import logging
 import sys
 import glob
 import json
+from collections import OrderedDict
 from flask import Flask, request, render_template, g
 from twisted.internet import task
 from twisted.internet import reactor
@@ -49,7 +50,7 @@ def index():
 
 @app.route('/by-node/<nodename>')
 def tree_for_node(nodename='iscsiObjects'):
-	tree = {}
+	tree = OrderedDict()
 	node = SMI.get_node(nodename)
 	if node is not None:
 		first_mod = node.get_module()
